@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Node Player</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+   
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="../../assets/js/html5shiv.js"></script>
+      <script src="../../assets/js/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body ng-controller="indexCtrl">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Cover</th>
+            <th>Music</th>
+            <th>Artist</th>
+            <th>Album</th>
+            <th>Year</th>
+            <th>Genre</th>
+            <th>Player</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="music in musics">
+            <td><img src="/picture/{{$index}}" alt="" style="height:50px;width:50px"></td>
+            <td>{{music.title}}</td>
+            <td>{{music.artist[0]}}</td>
+            <td>{{music.year}}</td>
+            <td>{{music.album}}</td>
+            <td>{{music.genre[0]}}</td>
+            <td>
+              <button type="button" class="btn btn-default btn-sm" ng-click="doPlay($index)">
+                <span class="glyphicon glyphicon-play"></span>
+              </button>
+              <button type="button" class="btn btn-default btn-sm" ng-click="doPause()">
+                <span class="glyphicon glyphicon-pause"></span>
+              </button>
+              <button type="button" class="btn btn-default btn-sm" ng-click="doStop()">
+                <span class="glyphicon glyphicon-stop"></span>
+              </button>
+              <button type="button" class="btn btn-default btn-sm" ng-click="doResume()">
+                <span class="glyphicon glyphicon-repeat"></span>
+              </button>
+            </td>
+          </tr>          
+        </tbody>
+      </table>
+    </div>
+    
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    <script src="/jquery/jquery.js"> </script>
+    <script src="/bootstrap/dist/js/bootstrap.js"> </script>
+    <script src="/angular/angular.js"> </script>
+    <script type="text/javascript"> 
+    var app = angular.module('app', []);
+    app.controller('indexCtrl',function($scope, $http){
+      $scope.musics=[];
+      $http.get('/list').then(function(data){
+        $scope.musics=data.data;
+      });
+      $scope.doPlay=function(index){
+        $http.get('/play/'+index);
+      };
+      $scope.doPause=function(){
+        $http.get('/pause');
+      };
+      $scope.doStop=function(){
+        $http.get('/stop');
+      };
+      $scope.doResume=function(){
+        $http.get('/resume');
+      };
+    });  
+    </script>
+  </body>
+</html>
+
